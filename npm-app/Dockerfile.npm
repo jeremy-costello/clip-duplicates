@@ -1,0 +1,16 @@
+FROM node:20-alpine3.17
+
+WORKDIR /npm-app
+
+COPY package.json ./
+COPY package-lock.json ./
+
+RUN npm install
+RUN npm install react-scripts@5.0.1
+
+COPY README.md ./
+COPY tailwind.config.js ./
+COPY src ./src
+COPY public ./public
+
+CMD ["npm", "start"]

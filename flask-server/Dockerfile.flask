@@ -1,0 +1,19 @@
+FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-runtime
+
+# deps for installing poetry
+RUN apt-get update && apt-get install --no-install-recommends -y curl
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+ENV PATH="/root/.local/bin:$PATH"
+
+WORKDIR /flask-server
+
+COPY poetry.lock ./
+COPY pyproject.toml ./
+
+RUN poetry install
+
+COPY *.py ./
+
+CMD ["poetry", "run", "flask", "--app", "server", "run", "--host", "0.0.0.0"]

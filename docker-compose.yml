@@ -1,0 +1,59 @@
+version: '3'
+services:
+  npm-app:
+    build:
+      context: ./npm-app
+      dockerfile: Dockerfile.npm
+    environment:
+      - PORT=${NPM_APP_CONTAINER_PORT}
+      - REACT_APP_PORT_NODE_SERVER=${NODE_SERVER_HOST_PORT}
+      - REACT_APP_PORT_FLASK_SERVER=${FLASK_SERVER_HOST_PORT}
+    ports:
+      - "${NPM_APP_HOST_PORT}:${NPM_APP_CONTAINER_PORT}"
+
+  node-server:
+    build:
+      context: ./node-server
+      dockerfile: Dockerfile.node
+    environment:
+      - PORT=${NODE_SERVER_CONTAINER_PORT}
+      - ROOT_PATH=${IMAGE_STORAGE_VOLUME_PATH}
+    ports:
+      - "${NODE_SERVER_HOST_PORT}:${NODE_SERVER_CONTAINER_PORT}"
+    volumes:
+      - image-storage:${IMAGE_STORAGE_VOLUME_PATH}
+
+  flask-server:
+    build:
+      context: ./flask-server
+      dockerfile: Dockerfile.flask
+    environment:
+      - ROOT_PATH=${IMAGE_STORAGE_VOLUME_PATH}
+      - BATCH_SIZE=${CLIP_ENCODING_BATCH_SIZE}
+      - CLIP_PATH=${CLIP_MODEL_VOLUME_PATH}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "${FLASK_SERVER_HOST_PORT}:${FLASK_SERVER_CONTAINER_PORT}"
+    volumes:
+      - image-storage:${IMAGE_STORAGE_VOLUME_PATH}
+      - postgres-data:${POSTGRES_DATA_VOLUME_PATH}
+      - clip-model:${CLIP_MODEL_VOLUME_PATH}
+
+  postgres-db:
+    image: postgres:15-alpine3.17
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_HOST_PORT}:${POSTGRES_CONTAINER_PORT}"
+    volumes:
+      - postgres-data:${POSTGRES_DATA_VOLUME_PATH}
+
+volumes:
+  image-storage:
+  postgres-data:
+  clip-model:
