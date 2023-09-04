@@ -71,7 +71,6 @@ def batch_encode_images(root_directory, image_directory,
             for i, image_file in tqdm(enumerate(image_files), total=num_image_files):
                 # Get relative location
                 relative_location = os.path.relpath(image_file, full_root_directory)
-                print(relative_location)
                 
                 cur.execute("SELECT COUNT(*) FROM image_embeddings WHERE relative_location = %s",
                             (relative_location,))
