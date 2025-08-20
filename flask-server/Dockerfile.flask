@@ -12,7 +12,7 @@ WORKDIR /flask-server
 COPY poetry.lock ./
 COPY pyproject.toml ./
 
-RUN poetry install
+RUN poetry install --no-root --no-interaction --no-ansi
 
 COPY *.py ./
 

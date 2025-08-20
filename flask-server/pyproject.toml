@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "CLIP duplicate detection and image search."
 authors = ["Jeremy Costello <jeremy1@ualberta.ca>"]
 license = "GNU GPL-3.0"
-readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.9"
