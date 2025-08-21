@@ -16,18 +16,18 @@ services:
       dockerfile: Dockerfile.node
     environment:
       - PORT=${NODE_SERVER_CONTAINER_PORT}
-      - ROOT_PATH=${IMAGE_STORAGE_VOLUME_PATH}
+      - ROOT_PATH=${DOCKER_IMAGE_STORAGE_VOLUME_PATH}
     ports:
       - "${NODE_SERVER_HOST_PORT}:${NODE_SERVER_CONTAINER_PORT}"
     volumes:
-      - image-storage:${IMAGE_STORAGE_VOLUME_PATH}
+      - ${HOST_IMAGE_STORAGE_VOLUME_PATH}:${DOCKER_IMAGE_STORAGE_VOLUME_PATH}
 
   flask-server:
     build:
       context: ./flask-server
       dockerfile: Dockerfile.flask
     environment:
-      - ROOT_PATH=${IMAGE_STORAGE_VOLUME_PATH}
+      - ROOT_PATH=${DOCKER_IMAGE_STORAGE_VOLUME_PATH}
       - BATCH_SIZE=${CLIP_ENCODING_BATCH_SIZE}
       - CLIP_PATH=${CLIP_MODEL_VOLUME_PATH}
       - POSTGRES_HOST=${POSTGRES_HOST}
@@ -37,7 +37,7 @@ services:
     ports:
       - "${FLASK_SERVER_HOST_PORT}:${FLASK_SERVER_CONTAINER_PORT}"
     volumes:
-      - image-storage:${IMAGE_STORAGE_VOLUME_PATH}
+      - ${HOST_IMAGE_STORAGE_VOLUME_PATH}:${DOCKER_IMAGE_STORAGE_VOLUME_PATH}
       - postgres-data:${POSTGRES_DATA_VOLUME_PATH}
       - clip-model:${CLIP_MODEL_VOLUME_PATH}
 
@@ -53,6 +53,5 @@ services:
       - postgres-data:${POSTGRES_DATA_VOLUME_PATH}
 
 volumes:
-  image-storage:
   postgres-data:
   clip-model:
