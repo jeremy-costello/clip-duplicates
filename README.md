@@ -6,12 +6,8 @@ CLIP duplicate detection and image search.
 - Open folder: ```cd clip-duplicates```
 - Rename ```.env.example``` to ```.env```
   - Can change variables in this file if needed (haven't tested anything but default)
-- Run this to get the postgres host
-  - ```docker network inspect bridge | grep Gateway``` (may need sudo)
-  - set ```POSTGRES_HOST``` in ```.env``` to this IP
-- Run docker compose: ```docker compose up``` (may need sudo)
-- Place images for de-duplication or text search in the ```clip-duplicates_image-storage``` docker volume
-  - Place them in a folder called ```images``` within the volume (in the ```_data``` folder)
+- Run docker compose: ```docker compose up``` (may need sudo and/or --build)
+- Place images for de-duplication or text search in the ```./data/images``` folder
 - Open the NPM app in browser: ```localhost:PORT``` (default PORT is 3000)
 - Open the menu on the left of the NPM app
 
